@@ -1,0 +1,21 @@
+name: iris_classifier
+description: Tested Iris decision-tree pipeline with evaluation branch.
+blocks:
+  - uuid: load_iris
+    type: data_loader
+  - uuid: prepare_data
+    type: transformer
+  - uuid: train_model
+    type: transformer
+  - uuid: save_results
+    type: data_exporter
+  - uuid: evaluate_model
+    type: data_exporter
+  - uuid: export_metrics
+    type: data_exporter
+tests:
+  - train_model
+  - save_results
+  - evaluate_model
+  - export_metrics
+
