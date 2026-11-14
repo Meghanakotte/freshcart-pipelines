@@ -35,10 +35,13 @@ def publish(count: int, interval: float, url: str, bad_every: int = 10) -> None:
     channel.exchange_declare(exchange=EXCHANGE, exchange_type="topic", durable=True)
     try:
         for index in range(1, count + 1):
-            payload = make_order(bad=index % bad_every == 0)
+            bad = index % bad_every == 0
+            payload = make_order(bad=False)
             routing_key = ".".join(
-                [payload["city"], payload.get("zone", "unknown"), payload["type"]]
+                [payload["city"], payload["zone"], payload["type"]]
             )
+            if bad:
+                payload.pop("zone")
             channel.basic_publish(
                 exchange=EXCHANGE,
                 routing_key=routing_key,

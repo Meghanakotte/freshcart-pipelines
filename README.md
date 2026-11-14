@@ -36,3 +36,13 @@ python stream\driver.py --driver ravi --max-messages 10
 The scripts are intentionally importable without a running broker, which keeps
 the unit tests deterministic.
 
+The local ML experiment table can be generated with:
+
+```powershell
+python -m iris_project.run_experiments
+```
+
+The Snowflake setup and sample load are in `elt/sql/01_setup.sql` and
+`elt/sql/05_load_sample.sql`; run those before the cleaning, deduplication,
+gold merge, and quality-check scripts.
+

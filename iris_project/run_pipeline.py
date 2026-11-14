@@ -1,6 +1,7 @@
 """Run the local equivalent of the Mage pipeline."""
 
 import argparse
+import json
 from pathlib import Path
 
 from iris_project.exporters.evaluate_model import evaluate
@@ -12,10 +13,11 @@ from iris_project.transformers.train_model import test as test_model
 from iris_project.transformers.train_model import train
 
 
-def run(max_depth: int = 3, output_dir: str = ".") -> float:
+def run(max_depth: int = 3, output_dir: str = ".", test: bool = True) -> float:
     prepared = transform(load_data())
     result = train(prepared, max_depth=max_depth)
-    test_model(result)
+    if test:
+        test_model(result)
     destination = Path(output_dir)
     save_results(result, str(destination / "iris_predictions.csv"))
     metrics = evaluate(result)
@@ -26,6 +28,10 @@ def run(max_depth: int = 3, output_dir: str = ".") -> float:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-depth", type=int, default=3)
+    parser.add_argument("--runtime-vars", default=None)
+    parser.add_argument("--test", action="store_true")
     parser.add_argument("--output-dir", default=".")
     args = parser.parse_args()
-    print(f"test_accuracy={run(args.max_depth, args.output_dir):.4f}")
+    runtime_vars = json.loads(args.runtime_vars) if args.runtime_vars else {}
+    max_depth = int(runtime_vars.get("max_depth", args.max_depth))
+    print(f"test_accuracy={run(max_depth, args.output_dir, test=True):.4f}")

@@ -1,3 +1,5 @@
+TRUNCATE TABLE silver.orders_dedup;
+
 INSERT INTO silver.orders_dedup
 SELECT order_id, customer_id, amount_inr, order_date, updated_at, source, row_hash, cleaned_at
 FROM silver.orders_clean

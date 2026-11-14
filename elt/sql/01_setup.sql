@@ -25,7 +25,17 @@ CREATE TABLE IF NOT EXISTS silver.orders_clean (
 );
 
 CREATE TABLE IF NOT EXISTS silver.orders_dedup LIKE silver.orders_clean;
-CREATE TABLE IF NOT EXISTS silver.orders_quarantine LIKE silver.orders_clean;
+CREATE TABLE IF NOT EXISTS silver.orders_quarantine (
+    order_id VARCHAR,
+    customer_id VARCHAR,
+    amount_inr NUMBER(12, 2),
+    order_date DATE,
+    updated_at TIMESTAMP_NTZ,
+    source VARCHAR,
+    row_hash VARCHAR,
+    reasons ARRAY,
+    quarantined_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
+);
 CREATE TABLE IF NOT EXISTS gold.orders (
     order_id VARCHAR PRIMARY KEY,
     customer_id VARCHAR,

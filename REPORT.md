@@ -28,16 +28,18 @@ the effective customer dimension row says Gold, while its earlier Silver
 version is retained for history.
 
 The currency rule accepts only INR and USD. Unsupported currencies are added to
-the quarantine reason array and cannot affect gold totals. A rerun does not add
-a second quarantine row because the quarantine load should use the same
-content hash as its idempotency key.
+the quarantine reason array as `unsupported_currency` and cannot affect gold
+totals. Silver and quarantine use a content hash as their merge key, while the
+deduplication table is rebuilt from the current clean set, so a rerun does not
+add duplicate rows.
 
 **B4 prediction before execution:** one current SCD2 row for CUST-02, Gold for
 ORD-1002, and two Gold rows updated only when the source hash changes. The
 `MERGE` is safe to rerun because it matches on `order_id` and updates only when
 `row_hash` differs.
 
-**B5 quality check:** the sixth check is `gold.loyalty_points < 0`. ELT is a
+**B5 quality check:** the sixth check is `quarantine_has_reason`, which checks
+that every quarantined row has at least one reason. ELT is a
 better fit here because Snowflake can load raw data first and apply auditable
 SQL transformations and quarantine rules close to the data. ETL would still
 win when a source cannot legally or practically land raw data, or when
@@ -56,7 +58,18 @@ python -m iris_project.run_pipeline --max-depth 3
 ```
 
 The evaluation branch writes `iris_metrics.csv`, and the custom exporter
-provides a separately tested metrics artifact.
+provides a separately tested metrics artifact. The five-run experiment table
+is generated with `python -m iris_project.run_experiments`.
+
+The local gate experiment produced the following results:
+
+| max_depth | Test accuracy | Test passed? | Predictions created? |
+|---:|---:|---|---|
+| 1 | failed gate | No | No |
+| 2 | 0.9333 | Yes | Yes |
+| 3 | 0.9667 | Yes | Yes |
+| 4 | 0.9333 | Yes | Yes |
+| 5 | 0.9333 | Yes | Yes |
 
 ## Part D - RabbitMQ stream
 
@@ -68,6 +81,17 @@ valid messages and NACK invalid messages with `requeue=False`, so a missing
 zone is discarded instead of retrying forever. With `requeue=True`, a
 permanently invalid message would be redelivered repeatedly and block useful
 work.
+
+The routing answers are:
+
+| Routing key | Receiving queues |
+|---|---|
+| `bangalore.koramangala.food` | Ravi, Meena, Control |
+| `bangalore.indiranagar.ride` | Priya, Arjun, Control |
+| `bangalore.whitefield.ride` | Arjun, Control |
+| `chennai.tnagar.food` | Karthik |
+| `chennai.whitefield.ride` | Dropped |
+| `bangalore.koramangala` | Control only |
 
 ## Part E - Reflection and evidence
 
