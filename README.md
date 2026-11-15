@@ -46,3 +46,6 @@ The Snowflake setup and sample load are in `elt/sql/01_setup.sql` and
 `elt/sql/05_load_sample.sql`; run those before the cleaning, deduplication,
 gold merge, and quality-check scripts.
 
+The ML pipeline also writes `iris_confusion_matrix.csv` from the evaluation
+branch alongside the metrics table.
+

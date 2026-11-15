@@ -1,6 +1,7 @@
 """Produce a metrics table for the evaluation branch."""
 
 import pandas as pd
+from sklearn.metrics import confusion_matrix
 
 
 def evaluate(output: dict) -> pd.DataFrame:
@@ -17,6 +18,17 @@ def evaluate(output: dict) -> pd.DataFrame:
             }
         ]
     )
+
+
+def confusion_matrix_table(output: dict) -> pd.DataFrame:
+    predictions = output["predictions"]
+    labels = sorted(predictions["species"].unique())
+    matrix = confusion_matrix(
+        predictions["species"], predictions["prediction"], labels=labels
+    )
+    return pd.DataFrame(matrix, index=labels, columns=labels).rename_axis(
+        "actual"
+    ).reset_index()
 
 
 def test(metrics: pd.DataFrame) -> None:

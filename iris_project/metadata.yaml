@@ -7,10 +7,15 @@ blocks:
     type: transformer
   - uuid: train_model
     type: transformer
+    downstream:
+      - save_results
+      - evaluate_model
   - uuid: save_results
     type: data_exporter
   - uuid: evaluate_model
     type: data_exporter
+    downstream:
+      - export_metrics
   - uuid: export_metrics
     type: data_exporter
 tests:

@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from iris_project.exporters.evaluate_model import evaluate
+from iris_project.exporters.evaluate_model import confusion_matrix_table, evaluate
 from iris_project.exporters.export_metrics import export as export_metrics
 from iris_project.exporters.save_results import export as save_results
 from iris_project.loaders.load_iris import load_data
@@ -22,6 +22,9 @@ def run(max_depth: int = 3, output_dir: str = ".", test: bool = True) -> float:
     save_results(result, str(destination / "iris_predictions.csv"))
     metrics = evaluate(result)
     export_metrics(metrics, str(destination / "iris_metrics.csv"))
+    confusion_matrix_table(result).to_csv(
+        destination / "iris_confusion_matrix.csv", index=False
+    )
     return result["test_accuracy"]
 
 
