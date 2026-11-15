@@ -3,6 +3,12 @@ description: Tested Iris decision-tree pipeline with evaluation branch.
 blocks:
   - uuid: load_iris
     type: data_loader
+    downstream:
+      - validate_iris
+  - uuid: validate_iris
+    type: transformer
+    downstream:
+      - prepare_data
   - uuid: prepare_data
     type: transformer
   - uuid: train_model
