@@ -2,7 +2,7 @@ MERGE INTO gold.orders AS target
 USING (
     SELECT d.order_id, d.customer_id, d.amount_inr, d.updated_at, d.row_hash,
            c.tier,
-           d.amount_inr * CASE c.tier WHEN 'Gold' THEN 2 WHEN 'Silver' THEN 1.5 ELSE 1 END AS loyalty_points
+           CEIL(d.amount_inr / 100) * CASE c.tier WHEN 'Gold' THEN 2 WHEN 'Silver' THEN 1 ELSE 1 END AS loyalty_points
     FROM silver.orders_dedup d
     LEFT JOIN (
         SELECT customer_id, tier

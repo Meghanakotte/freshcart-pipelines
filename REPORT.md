@@ -22,10 +22,11 @@ normalizes them into `silver.orders_clean`, sends invalid records to
 `silver.orders_dedup`, and merges current records into `gold.orders`.
 `ORD-1003` demonstrates schema normalization and latest-record wins:
 the mobile record has the later `updated_at`, so its amount survives the
-deduplication. Loyalty points are `amount_inr * tier multiplier`; the current
-SCD2 customer row supplies the tier. `ORD-1005` earns Gold points only when
-the effective customer dimension row says Gold, while its earlier Silver
-version is retained for history.
+deduplication. Loyalty points are `CEIL(amount_inr / 100) * tier multiplier`,
+using 2 for Gold and 1 for Silver/other tiers. The supplied sample load
+therefore produces INR 7,785 revenue and 126 points. `ORD-1005` earns Gold
+points only when the effective customer dimension row says Gold, while its
+earlier Silver version is retained for history.
 
 The currency rule accepts only INR and USD. Unsupported currencies are added to
 the quarantine reason array as `unsupported_currency` and cannot affect gold

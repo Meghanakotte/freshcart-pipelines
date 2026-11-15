@@ -26,12 +26,12 @@ WHEN NOT MATCHED THEN INSERT VALUES (
 MERGE INTO bronze.orders_raw AS target
 USING (
     SELECT * FROM VALUES
-    ('ORD-1001', 'CUST-01', '1000', 'INR', '2026-01-05', '2026-01-05 10:00:00'::TIMESTAMP_NTZ, 'website'),
+    ('ORD-1001', 'CUST-01', '1001', 'INR', '2026-01-05', '2026-01-05 10:00:00'::TIMESTAMP_NTZ, 'website'),
     ('ORD-1002', 'CUST-02', '1500', 'INR', '2026-01-06', '2026-01-06 10:00:00'::TIMESTAMP_NTZ, 'website'),
     ('ORD-1003', 'CUST-01', NULL, 'INR', '2026-01-07', '2026-01-07 10:00:00'::TIMESTAMP_NTZ, 'website'),
     ('ORD-1003', 'CUST-01', '2100', 'INR', '2026-01-07', '2026-01-08 10:00:00'::TIMESTAMP_NTZ, 'mobile'),
-    ('ORD-1005', 'CUST-05', '3185', 'INR', '2026-01-09', '2026-01-09 11:00:00'::TIMESTAMP_NTZ, 'mobile'),
-    ('ORD-1005', 'CUST-05', '3185', 'INR', '2026-01-09', '2026-01-09 10:00:00'::TIMESTAMP_NTZ, 'website'),
+    ('ORD-1005', 'CUST-05', '3184', 'INR', '2026-01-09', '2026-01-09 11:00:00'::TIMESTAMP_NTZ, 'mobile'),
+    ('ORD-1005', 'CUST-05', '3184', 'INR', '2026-01-09', '2026-01-09 10:00:00'::TIMESTAMP_NTZ, 'website'),
     ('ORD-1004', 'CUST-01', 'bad', 'INR', '2026-01-10', '2026-01-10 10:00:00'::TIMESTAMP_NTZ, 'website'),
     ('ORD-1006', 'CUST-02', '100', 'EUR', '2026-01-11', '2026-01-11 10:00:00'::TIMESTAMP_NTZ, 'mobile')
 ) AS source(order_id, customer_id, amount, currency, order_date, updated_at, source)
