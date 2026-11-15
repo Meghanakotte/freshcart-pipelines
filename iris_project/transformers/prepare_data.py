@@ -10,7 +10,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
 
         df = load_data()
     train, test = train_test_split(
-        df, test_size=0.2, random_state=42, stratify=df["species"]
+        df, test_size=0.3, random_state=42, stratify=df["species"]
     )
     result = df.copy()
     result["split"] = "test"
