@@ -13,7 +13,10 @@ USING (
     ) c USING (customer_id)
 ) AS source
 ON target.order_id = source.order_id
-WHEN MATCHED AND target.row_hash <> source.row_hash THEN UPDATE SET
+WHEN MATCHED AND (
+    target.row_hash <> source.row_hash
+    OR COALESCE(target.tier, '') <> COALESCE(source.tier, '')
+) THEN UPDATE SET
     customer_id = source.customer_id,
     amount_inr = source.amount_inr,
     loyalty_points = source.loyalty_points,
