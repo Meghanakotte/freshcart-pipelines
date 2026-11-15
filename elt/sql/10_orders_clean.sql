@@ -9,7 +9,8 @@ USING (
         source,
         SHA2(CONCAT_WS('|', order_id, customer_id, amount, currency, order_date, updated_at), 256) AS row_hash
     FROM bronze.orders_raw
-    WHERE UPPER(currency) IN ('INR', 'USD')
+    WHERE (amount IS NULL OR TRY_TO_DECIMAL(amount, 12, 2) IS NOT NULL)
+      AND UPPER(currency) IN ('INR', 'USD')
       AND TRY_TO_DATE(order_date) IS NOT NULL
 ) AS source
 ON target.row_hash = source.row_hash
@@ -35,7 +36,8 @@ USING (
             IFF(TRY_TO_DATE(order_date) IS NULL, 'invalid_order_date', NULL)
         ) AS reasons
     FROM bronze.orders_raw
-    WHERE UPPER(currency) NOT IN ('INR', 'USD')
+    WHERE (amount IS NOT NULL AND TRY_TO_DECIMAL(amount, 12, 2) IS NULL)
+       OR UPPER(currency) NOT IN ('INR', 'USD')
        OR TRY_TO_DATE(order_date) IS NULL
 ) AS source
 ON target.row_hash = source.row_hash
