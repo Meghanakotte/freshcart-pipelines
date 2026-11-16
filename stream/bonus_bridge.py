@@ -10,7 +10,10 @@ from uuid import uuid4
 
 import pika
 
-from stream.dispatcher import EXCHANGE
+try:
+    from stream.dispatcher import EXCHANGE
+except ModuleNotFoundError:
+    from dispatcher import EXCHANGE
 
 
 def write_landing(
