@@ -7,12 +7,11 @@ on Snowflake, a tested Mage-style ML pipeline, and RabbitMQ topic routing.
 
 ```text
 freshcart-pipelines/
-├── elt/                 # Snowflake SQL and executable notebook
-├── iris_project/        # Mage-compatible Iris pipeline blocks
-├── stream/              # RabbitMQ dispatcher and driver
-├── tests/               # Local tests and pipeline checks
-├── REPORT.md            # Submission report and run evidence checklist
-└── .github/workflows/   # Python 3.12 CI
+|-- elt/                 # Snowflake SQL and executable notebook
+|-- iris_project/        # Mage-compatible Iris pipeline blocks
+|-- stream/              # RabbitMQ dispatcher and driver
+|-- tests/               # Local tests and pipeline checks
+`-- .github/workflows/   # Python 3.12 CI
 ```
 
 ## Local checks
