@@ -17,12 +17,21 @@ ORDER_TYPES = ("ride", "food")
 
 def make_order(order_id: str | None = None, bad: bool = False) -> dict:
     city = random.choice(tuple(CITIES))
+    timestamp = datetime.now(timezone.utc)
+    event_id = order_id or str(uuid4())
     order = {
-        "id": order_id or str(uuid4()),
+        "id": event_id,
         "city": city,
         "zone": random.choice(CITIES[city]),
         "type": random.choice(ORDER_TYPES),
-        "ts": datetime.now(timezone.utc).isoformat(),
+        "ts": timestamp.isoformat(),
+        "order_id": event_id,
+        "customer_id": "CUST-01",
+        "amount": str(random.choice((250, 500, 750))),
+        "currency": "INR",
+        "order_date": timestamp.date().isoformat(),
+        "updated_at": timestamp.isoformat(),
+        "source": "rabbitmq",
     }
     if bad:
         order.pop("zone")

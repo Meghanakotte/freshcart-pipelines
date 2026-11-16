@@ -11,6 +11,8 @@ blocks:
       - prepare_data
   - uuid: prepare_data
     type: transformer
+    downstream:
+      - train_model
   - uuid: train_model
     type: transformer
     downstream:

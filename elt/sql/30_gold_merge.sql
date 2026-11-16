@@ -4,13 +4,10 @@ USING (
            c.tier,
            CEIL(d.amount_inr / 100) * CASE c.tier WHEN 'Gold' THEN 2 WHEN 'Silver' THEN 1 ELSE 1 END AS loyalty_points
     FROM silver.orders_dedup d
-    LEFT JOIN (
-        SELECT customer_id, tier
-        FROM dim.customers_scd2
-        WHERE effective_from <= CURRENT_DATE()
-          AND (effective_to IS NULL OR effective_to > CURRENT_DATE())
-        QUALIFY ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY effective_from DESC) = 1
-    ) c USING (customer_id)
+    LEFT JOIN dim.customers_scd2 c
+      ON c.customer_id = d.customer_id
+     AND d.order_date >= c.effective_from
+     AND (c.effective_to IS NULL OR d.order_date < c.effective_to)
 ) AS source
 ON target.order_id = source.order_id
 WHEN MATCHED AND (

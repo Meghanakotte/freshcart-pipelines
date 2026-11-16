@@ -36,6 +36,17 @@ python stream\driver.py --driver ravi --max-messages 10
 The scripts are intentionally importable without a running broker, which keeps
 the unit tests deterministic.
 
+The optional Part D bonus bridge is in
+`stream/bonus_bridge.py`. Start the dispatcher, set `RABBITMQ_URL`, and run:
+
+```powershell
+python stream\bonus_bridge.py --duration 60
+```
+
+The bridge writes a JSON Lines landing file. The bonus section in
+`elt/freshcart_elt.ipynb` calls `load_file()`, reruns the Silver/Gold SQL, and
+compares Gold totals after loading the same batch twice.
+
 The local ML experiment table can be generated with:
 
 ```powershell

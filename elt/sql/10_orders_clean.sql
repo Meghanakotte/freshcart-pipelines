@@ -32,6 +32,7 @@ USING (
         source,
         SHA2(CONCAT_WS('|', order_id, customer_id, amount, currency, order_date, updated_at), 256) AS row_hash,
         ARRAY_CONSTRUCT_COMPACT(
+            IFF(amount IS NOT NULL AND TRY_TO_DECIMAL(amount, 12, 2) IS NULL, 'invalid_amount', NULL),
             IFF(UPPER(currency) NOT IN ('INR', 'USD'), 'unsupported_currency', NULL),
             IFF(TRY_TO_DATE(order_date) IS NULL, 'invalid_order_date', NULL)
         ) AS reasons
