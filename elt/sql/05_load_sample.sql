@@ -14,7 +14,7 @@ SET effective_to = source.effective_from
 FROM (
     SELECT * FROM VALUES
         ('CUST-01', 'Asha', 'asha@example.com', 'Silver', '2025-01-01'::DATE, NULL::DATE),
-        ('CUST-02', 'Arjun', 'arjun@example.com', 'Gold', '2026-02-01'::DATE, NULL::DATE),
+        ('CUST-02', 'Arjun', 'arjun.k@yahoo.in', 'Silver', '2025-01-01'::DATE, NULL::DATE),
         ('CUST-05', 'Priya', 'priya@example.com', 'Gold', '2025-01-01'::DATE, NULL::DATE)
 ) AS source(customer_id, customer_name, email, tier, effective_from, effective_to)
 WHERE target.customer_id = source.customer_id
@@ -25,7 +25,7 @@ MERGE INTO dim.customers_scd2 AS target
 USING (
     SELECT * FROM VALUES
         ('CUST-01', 'Asha', 'asha@example.com', 'Silver', '2025-01-01'::DATE, NULL::DATE),
-        ('CUST-02', 'Arjun', 'arjun@example.com', 'Gold', '2026-02-01'::DATE, NULL::DATE),
+        ('CUST-02', 'Arjun', 'arjun.k@yahoo.in', 'Silver', '2025-01-01'::DATE, NULL::DATE),
         ('CUST-05', 'Priya', 'priya@example.com', 'Gold', '2025-01-01'::DATE, NULL::DATE)
 ) AS source(customer_id, customer_name, email, tier, effective_from, effective_to)
 ON target.customer_id = source.customer_id

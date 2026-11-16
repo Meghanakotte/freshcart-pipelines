@@ -53,9 +53,10 @@ The local ML experiment table can be generated with:
 python -m iris_project.run_experiments
 ```
 
-The Snowflake setup and sample load are in `elt/sql/01_setup.sql` and
-`elt/sql/05_load_sample.sql`; run those before the cleaning, deduplication,
-gold merge, and quality-check scripts.
+The Snowflake setup, sample load, and customer SCD2 event are in
+`elt/sql/01_setup.sql`, `elt/sql/05_load_sample.sql`, and
+`elt/sql/06_customer_tier_event.sql`; run them before the cleaning,
+deduplication, gold merge, and quality-check scripts.
 
 The ML pipeline also writes `iris_confusion_matrix.csv` from the evaluation
 branch alongside the metrics table.
